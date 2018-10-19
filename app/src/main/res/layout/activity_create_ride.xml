@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.CreateRideActivity">
+
+    <LinearLayout
+        android:id="@+id/search_bar_createRider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:elevation="1dp"
+        android:orientation="horizontal"
+        android:translationZ="8dp">
+
+        <include layout="@layout/search_autocomplete_frag"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/b_next_cr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="16dp"
+        android:background="@drawable/next_button_paint"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:paddingVertical="12dp"
+        android:text="Next"
+        android:textColor="@android:color/white"
+        android:textSize="24dp" />
+
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.xhaxs.rider;
+package com.example.xhaxs.rider.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.xhaxs.rider.R;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,11 +22,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        maintoolbar=findViewById(R.id.maintoolbar);
+        maintoolbar = findViewById(R.id.maintoolbar);
         setSupportActionBar(maintoolbar);
         getSupportActionBar().setTitle("HillShare");
 
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
     }
 
@@ -33,12 +34,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseUser currentuser= FirebaseAuth.getInstance().getCurrentUser();
-        if(currentuser==null)
-        {
+        FirebaseUser currentuser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentuser == null) {
             // user is not logged in
             // send him to login page
-            Intent i=new Intent(MainActivity.this,LoginActivity.class);
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
         }
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
         return true;
     }
@@ -55,13 +55,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.menu_logout_btn:
-                        logout();
-                        return true;
+                logout();
+                return true;
 
-             default: return false;
+            default:
+                return false;
 
         }
     }
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-        Intent sendtologin=new Intent(MainActivity.this,LoginActivity.class);
+        Intent sendtologin = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(sendtologin);
         finish();
 
