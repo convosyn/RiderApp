@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,17 +21,24 @@ import android.widget.Toast;
 import com.example.xhaxs.rider.Datatype.CreateRideDetailData;
 import com.example.xhaxs.rider.Datatype.PlaceData;
 import com.example.xhaxs.rider.Datatype.UserSumData;
+import com.example.xhaxs.rider.LogHandle;
 import com.example.xhaxs.rider.R;
+import com.facebook.login.Login;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 //import java.text.DateFormat;
 
@@ -56,7 +65,10 @@ public class CreateRideOtherDetails extends AppCompatActivity implements
     private PlaceData toPlaceData;
     private Calendar calendarFinal;
     private CreateRideDetailData mCreateRideDetailData;
+    private DatabaseReference mDatabase;
     private GeoDataClient mGeoDataClient;
+
+    private FirebaseUser mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +76,10 @@ public class CreateRideOtherDetails extends AppCompatActivity implements
         setContentView(R.layout.activity_create_ride_other_details);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        LogHandle.checkLogin(FirebaseAuth.getInstance(), this);
+
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         Intent intent = getIntent();
 
@@ -73,8 +89,8 @@ public class CreateRideOtherDetails extends AppCompatActivity implements
         mToLocationSecondary = findViewById(R.id.tv_to_extra_info_cro);
 
         mGeoDataClient = Places.getGeoDataClient(this);
-        String fLoc = intent.getStringExtra("fromLocationDetails");
-        String tLoc = intent.getStringExtra("toLocationDetails");
+        final String fLoc = intent.getStringExtra("fromLocationDetails");
+        final String tLoc = intent.getStringExtra("toLocationDetails");
 
         Log.d(this.getClass().getName(), "+++++++++++++++++++GOT FROM -- " + fLoc + " <><><> " + tLoc + " -- TO ID++++++++++++++++++++++++++++");
 
@@ -169,19 +185,22 @@ public class CreateRideOtherDetails extends AppCompatActivity implements
         mSubmitRideDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* TODO
-                 *
-                 * 1. Replace UserSumData in Create RideDetail with user id of current User
-                 * 2. Store the data in Firebase
-                 *
-                 */
+
                 mCreateRideDetailData = new CreateRideDetailData(
-                        new UserSumData("1", "Name", "name@gmail.com"),
-                        fromPlaceData,
+                        new UserSumData(mCurrentUser.getUid(), mCurrentUser.getDisplayName(), mCurrentUser.getEmail()),
                         toPlaceData,
+                        fromPlaceData,
                         calendarFinal,
                         cMaxCount
                 );
+
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                String key = mDatabase.child("Riders").push().getKey();
+                HashMap<String, Object> result = mCreateRideDetailData.toMap();
+
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put("/Riders/" + key, result);
+                mDatabase.updateChildren(childUpdates);
 
                 Toast.makeText(CreateRideOtherDetails.this, "Rider Created with details # " + mCreateRideDetailData.toString(), Toast.LENGTH_SHORT).show();
                 Intent intent1 = new Intent(CreateRideOtherDetails.this, SearchRideActivity.class);
@@ -216,7 +235,7 @@ public class CreateRideOtherDetails extends AppCompatActivity implements
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         hourFinal = hourOfDay;
         minuteFinal = minute;
-        Calendar calendar = new GregorianCalendar(yearFinal, monthFinal, dayFinal, hourFinal, monthFinal);
+        Calendar calendar = new GregorianCalendar(yearFinal, monthFinal, dayFinal, hourFinal, minuteFinal);
         calendarFinal = calendar;
         java.text.DateFormat dateFormat = java.text.DateFormat
                 .getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.SHORT);
@@ -229,4 +248,27 @@ public class CreateRideOtherDetails extends AppCompatActivity implements
         if (cMaxCount < 0) cMaxCount = 0;
         mMaxCountDisplay.setText("" + cMaxCount);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_logout_btn:
+                LogHandle.logout(FirebaseAuth.getInstance(), this);
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+
 }
