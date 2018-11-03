@@ -72,7 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(RegisterActivity.this, "Account Created", Toast.LENGTH_SHORT).show();
                                     Intent sendtomain = new Intent(RegisterActivity.this, ProfileDetailsActivity.class);
-
                                     startActivity(sendtomain);
                                     finish();
                                 } else {
