@@ -86,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
 //
 //                                                }
 //                                            });
-                                    Intent sendtomain = new Intent(RegisterActivity.this, ProfileDetailsActivity.class);
+                                    Intent sendtomain = new Intent(RegisterActivity.this, SearchRideActivity.class);
                                     startActivity(sendtomain);
                                     finish();
                                 } else {
@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseUser currenruser = mAuth.getCurrentUser();
         if (currenruser != null && currenruser.isEmailVerified() ) {
             // user is logged in and no need to register/login
-            Intent sendtomain = new Intent(RegisterActivity.this, ProfileDetailsActivity.class);
+            Intent sendtomain = new Intent(RegisterActivity.this, SearchRideActivity.class);
             startActivity(sendtomain);
             finish();
         }
