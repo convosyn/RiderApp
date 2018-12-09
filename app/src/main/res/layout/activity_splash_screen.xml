@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:paddingTop="80dp"
+    android:paddingTop="80sp"
     tools:context=".Activity.SplashScreen">
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:gravity="center"
             android:text="Welcome to"
             android:textColor="@color/green"
-            android:textSize="30dp"
+            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -30,8 +30,8 @@
             android:id="@+id/HillShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="70dp"
-            android:paddingRight="70dp"
+            android:paddingLeft="70sp"
+            android:paddingRight="70sp"
             android:src="@drawable/splash_on"
             android:layout_gravity="center"
             app:layout_constraintTop_toBottomOf="@+id/welcome"/>
