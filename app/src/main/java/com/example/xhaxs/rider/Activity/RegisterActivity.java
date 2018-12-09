@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -29,6 +30,8 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
+        getSupportActionBar().hide(); //hide the title bar
         setContentView(R.layout.activity_register);
 
         /*
@@ -83,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
 //
 //                                                }
 //                                            });
-                                    Intent sendtomain = new Intent(RegisterActivity.this, ProfileDetailsActivity.class);
+                                    Intent sendtomain = new Intent(RegisterActivity.this, SearchRideActivity.class);
                                     startActivity(sendtomain);
                                     finish();
                                 } else {
@@ -113,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseUser currenruser = mAuth.getCurrentUser();
         if (currenruser != null && currenruser.isEmailVerified() ) {
             // user is logged in and no need to register/login
-            Intent sendtomain = new Intent(RegisterActivity.this, ProfileDetailsActivity.class);
+            Intent sendtomain = new Intent(RegisterActivity.this, SearchRideActivity.class);
             startActivity(sendtomain);
             finish();
         }
